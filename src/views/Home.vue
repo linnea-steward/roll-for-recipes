@@ -12,78 +12,34 @@
   </div>
 </template>
 
+<style lang="scss">
+.home {
+  .grid {
+    display: grid;
+    grid-template-rows: auto;
+    grid-column-gap: 1rem;
+    grid-row-gap: 1rem;
+
+    @for $i from 1 through 12 {
+      @media (min-width: #{320 * $i}px) {
+        grid-template-columns: repeat($i, 1fr);
+      }
+    }
+  }
+}
+</style>
+
 <script>
 // @ is an alias to /src
+import Vue from "vue";
+import { Component, Prop } from "vue-property-decorator";
 import RecipeCard from "@/components/RecipeCard.vue";
+import axios from "axios";
 
-let cards = [];
-cards = [
-  {
-    timestamp: "3/6/2019 17:40:07",
-    name: "Instant Pot Pasta with Spinach and Sausage",
-    link:
-      "https://www.rachelcooks.com/2018/03/12/instant-pot-pasta-sausage-spinach/print/",
-    totalCalories: null,
-    numberOfServings: 6,
-    caloriesPerServing: 300,
-    method: "Instant Pot",
-    ethnicity: "Italian",
-    meal: "lunch, dinner",
-    imageLink:
-      "https://www.rachelcooks.com/wp-content/uploads/2018/03/instant-pot-pasta-sausage-web-4-of-4-600x789.jpg",
-    glutenFree: false,
-    glutenFreeOptions: "Replace pasta with GF pasta",
-    protein: "Turkey Sausage",
-    grains: "Pasta",
-    veggies: "Tomatoes, Spinach",
-    spices: "Oregano",
-    otherSupplies: "Olive Oil",
-    totalCookTime: null
-  },
-  {
-    timestamp: "3/6/2019 21:41:15",
-    name: "Keto Beef Egg Roll Slaw",
-    link: "https://www.allrecipes.com/recipe/264086/keto-beef-egg-roll-slaw/",
-    totalCalories: null,
-    numberOfServings: 6,
-    caloriesPerServing: 350,
-    method: "Saute",
-    ethnicity: "Asian-American",
-    meal: "Lunch, Dinner",
-    imageLink:
-      "https://images.media-allrecipes.com/userphotos/560x315/5327131.jpg",
-    glutenFree: "Yes",
-    glutenFreeOptions: null,
-    protein: "Ground Beef",
-    grains: null,
-    veggies: "Green Onion, Yellow Onion, Coleslaw",
-    spices: "Ground Ginger",
-    otherSupplies: "Sesame Oil, Soy Sauce, Apple Cider Vinegar, Sriracha",
-    totalCookTime: null
-  },
-  {
-    timestamp: "3/6/2019 21:45:37",
-    name: "BLT Chicken Salad",
-    link:
-      "https://www.allrecipes.com/recipe/16466/chicken-salad-with-bacon-lettuce-and-tomato/",
-    totalCalories: null,
-    numberOfServings: 6,
-    caloriesPerServing: 456,
-    method: "Skillet",
-    ethnicity: "American",
-    meal: "Lunch, Dinner",
-    imageLink:
-      "https://images.media-allrecipes.com/userphotos/720x405/786271.jpg",
-    glutenFree: "Yes",
-    glutenFreeOptions: null,
-    protein: "Bacon, Chicken",
-    grains: null,
-    veggies: "Green Onion, Tomato, Avocado",
-    spices: null,
-    otherSupplies: "Mayo, Worcestershire Sauce, Lemon Juice",
-    totalCookTime: null
-  }
-];
+@Component
+export default class Home extends Vue {
+  cards: any[];
+}
 
 export default {
   name: "home",
@@ -94,6 +50,13 @@ export default {
   },
   components: {
     RecipeCard
+  },
+  created: () => {
+    axios
+      .get("https://api.sheety.co/140bb7d0-0b81-4c8a-9fcb-123a9e7cf840")
+      .then(response => {
+        this.cards = response;
+      });
   }
 };
 </script>
